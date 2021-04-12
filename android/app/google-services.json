@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "605895691453",
+    "project_id": "social-food-app-b48d5",
+    "storage_bucket": "social-food-app-b48d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605895691453:android:4d17f3bf72fb5642b37bd4",
+        "android_client_info": {
+          "package_name": "com.alphadiallo.socialfoody"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605895691453-g7ihh896i22uidd5ekfuvhhtal6bl9s6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEvJg0au4l80CdZCf6_ZLQbCr_HqAkuDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "605895691453-g7ihh896i22uidd5ekfuvhhtal6bl9s6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
