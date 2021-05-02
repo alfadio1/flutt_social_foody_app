@@ -1,75 +1,83 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'package:image/image.dart' as ImD;
 
 import 'package:socialfoody/models/user.dart';
+import 'package:socialfoody/pages/HomePage.dart';
+import 'package:socialfoody/widgets/ProgressWidget.dart';
+import 'package:uuid/uuid.dart';
+
 class UploadPage extends StatefulWidget {
   final User gCurrentUser;
   UploadPage({this.gCurrentUser});
+
   @override
   _UploadPageState createState() => _UploadPageState();
 }
 
-class _UploadPageState extends State<UploadPage> {
+class _UploadPageState extends State<UploadPage>  with AutomaticKeepAliveClientMixin<UploadPage>
+{
 
   File file;
   bool uploading = false;
-  // String postId = Uuid().v4();
+  String postId = Uuid().v4();
   TextEditingController descriptionTextEditingController = TextEditingController();
   TextEditingController locationTextEditingController = TextEditingController();
 
   captureImageWithCamera() async{
     Navigator.pop(context);
-    File imagefile = await ImagePicker.pickImage(
+    File imageFile = await ImagePicker.pickImage(
       source: ImageSource.camera,
       maxHeight: 680,
       maxWidth: 970,
     );
     setState(() {
-      this.file = imagefile;
+      this.file = imageFile;
 
     });
   }
 
   pickImageFromGallery() async{
     Navigator.pop(context);
-    File imagefile = await ImagePicker.pickImage(
+    File imageFile = await ImagePicker.pickImage(
       source: ImageSource.gallery,
     );
     setState(() {
-      this.file = imagefile;
+      this.file = imageFile;
 
     });
   }
-
 
   takeImage(mContext){
     return showDialog(
       context: mContext,
       builder: (context){
         return SimpleDialog(
-          title: Text("New Post", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+          title: Text("New Post", style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
           children: <Widget>[
             SimpleDialogOption(
-              child: Text("Choose Image from camera", style: TextStyle(color: Colors.white),),
-              onPressed:captureImageWithCamera() ,
+              child: Text("Choose Image with camera", style: TextStyle(color: Colors.black),),
+              onPressed:captureImageWithCamera,
             ),
             SimpleDialogOption(
-              child: Text("Choose Image from Gallery", style: TextStyle(color: Colors.white),),
-              onPressed:pickImageFromGallery() ,
+              child: Text("Choose Image from Gallery", style: TextStyle(color: Colors.black),),
+              onPressed:pickImageFromGallery ,
             ),
             SimpleDialogOption(
-              child: Text("Cancel", style: TextStyle(color: Colors.white),
+              child: Text("Cancel", style: TextStyle(color: Colors.red),
         ),
               onPressed: ()=> Navigator.pop(context),
             ),
 
           ],
         );
-      }
+      },
     );
 
   }
@@ -98,36 +106,91 @@ class _UploadPageState extends State<UploadPage> {
     );
   }
 
-  removeImage(){
+  clearPostInfo(){
+    locationTextEditingController.clear();
+    descriptionTextEditingController.clear();
     setState(() {
       file = null;
     });
   }
 
-  getUerCurrentLocation() async {
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placeMarks = await Geolocator().placemarkFromCoordinates(position.altitude, position.longitude);
-    Placemark mPlaceMark = placeMarks[0];
-    String completeAddressInfo = '${mPlaceMark.subThoroughfare} ${mPlaceMark.thoroughfare}, ${mPlaceMark.subLocality} ${mPlaceMark.locality}, ${mPlaceMark.subAdministrativeArea} ${mPlaceMark.administrativeArea}, ${mPlaceMark.postalCode} ${mPlaceMark.country},';
-    String specificAddress = ' ${mPlaceMark.locality},  ${mPlaceMark.country},';
-    locationTextEditingController.text = specificAddress;
+  // getUserCurrentLocation() async {
+  //   Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  //   List<Placemark> placeMarks = await Geolocator().placemarkFromCoordinates(position.altitude, position.longitude);
+  //   Placemark mPlaceMark = placeMarks[0];
+  //   String completeAddressInfo = '${mPlaceMark.subThoroughfare} ${mPlaceMark.thoroughfare}, ${mPlaceMark.subLocality} ${mPlaceMark.locality}, ${mPlaceMark.subAdministrativeArea} ${mPlaceMark.administrativeArea}, ${mPlaceMark.postalCode} ${mPlaceMark.country},';
+  //   String specificAddress = ' ${mPlaceMark.locality},  ${mPlaceMark.country},';
+  //   locationTextEditingController.text = specificAddress;
+  // }
+
+  compressingPhoto() async {
+    final tDirectory = await getTemporaryDirectory();
+    final path = tDirectory.path;
+    ImD.Image mImageFile = ImD.decodeImage(file.readAsBytesSync());
+    final compressedImageFile = File('$path/img_$postId.jpg')..writeAsBytesSync(ImD.encodeJpg(mImageFile, quality: 90));
+    setState(() {
+      file = compressedImageFile;
+    });
+  }
+
+  controlUploadAndSave() async {
+    setState(() {
+      uploading = true;
+    });
+    await compressingPhoto();
+
+    String downloadUrl = await uploadPhoto(file);
+
+    savePostInfoToFireStore(url: downloadUrl, location: locationTextEditingController.text, description: descriptionTextEditingController.text);
+
+    locationTextEditingController.clear();
+    descriptionTextEditingController.clear();
+
+    setState(() {
+      file = null;
+      uploading =false;
+      postId = Uuid().v4();
+    });
+  }
+
+  savePostInfoToFireStore({String url, String location, String description}){
+    postsReference.document(widget.gCurrentUser.id).collection("userPosts").document(postId).setData({
+      "postId": postId,
+      "ownerId": widget.gCurrentUser.id,
+      "timestamp": timestamp,
+      "likes": {},
+      "username": widget.gCurrentUser.username,
+      "description": description,
+      "location": location,
+      "url": url,
+
+    });
+
+  }
+
+  Future<String>  uploadPhoto(mImageFile) async {
+    StorageUploadTask mStorageUploadTask = storageReference.child("post_$postId.jpg").putFile(mImageFile);
+    StorageTaskSnapshot storageTaskSnapshot = await mStorageUploadTask.onComplete;
+    String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+    return downloadUrl;
   }
 
   displayUploadFormScreen(){
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.black,), onPressed: removeImage),
-        title: Text("New Post", style: TextStyle(fontSize: 24.0,color: Colors.white, fontWeight: FontWeight.bold),),
+        backgroundColor: Colors.black45,
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.black,), onPressed: clearPostInfo),
+        title: Text("New Recipe", style: TextStyle(fontSize: 24.0,color: Colors.blueGrey, fontWeight: FontWeight.bold),),
         actions: [
           FlatButton(
-        onPressed: ()=> print("tapped"),
-        child: Text("Share",style: TextStyle(color: Colors.lightGreenAccent, fontWeight: FontWeight.bold, fontSize: 16.0),),
+            onPressed: uploading ? null : ()=> controlUploadAndSave(),
+            child: Text("Share",style: TextStyle(color: Colors.lightBlueAccent, fontWeight: FontWeight.bold, fontSize: 16.0),),
           )
         ],
       ),
       body: ListView(
         children: <Widget>[
+          uploading ? linearProgress() : Text(""),
           Container(
             height: 230.0,
             width: MediaQuery.of(context).size.width * 0.8,
@@ -150,11 +213,11 @@ class _UploadPageState extends State<UploadPage> {
             title: Container(
               width: 250.0,
               child: TextField(
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
                 controller: descriptionTextEditingController,
                 decoration: InputDecoration(
-                  hintText: "say Something about your picture",
-                  hintStyle: TextStyle(color: Colors.white),
+                  hintText: "say Something about your recipe",
+                  hintStyle: TextStyle(color: Colors.black),
                   border: InputBorder.none,
                 ),
               ),
@@ -162,15 +225,15 @@ class _UploadPageState extends State<UploadPage> {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.person_pin, color: Colors.white,size: 36.0,),
+            leading: Icon(Icons.location_on, color: Colors.black,size: 36.0,),
             title: Container(
               width: 250.0,
               child: TextField(
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
                 controller: locationTextEditingController,
                 decoration: InputDecoration(
-                  hintText: "write the location",
-                  hintStyle: TextStyle(color: Colors.white),
+                  hintText: "write your location",
+                  hintStyle: TextStyle(color: Colors.black),
                   border: InputBorder.none,
                 ),
               ),
@@ -181,17 +244,21 @@ class _UploadPageState extends State<UploadPage> {
             height: 110.0,
             alignment: Alignment.center,
             child: RaisedButton.icon(
+              onPressed: ()=> print("tapped"),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35.0)),
               color: Colors.black,
               icon: Icon(Icons.location_on_outlined, color: Colors.white,),
               label: Text("Get my Location", style: TextStyle(color: Colors.white),),
-              onPressed: getUerCurrentLocation(),
+              // onPressed: getUserCurrentLocation(),
             ),
           )
         ],
       ),
     );
   }
+
+
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

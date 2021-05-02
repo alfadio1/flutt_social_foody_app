@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:socialfoody/pages/features_banner.dart';
-// import 'package:socialfoody/pages/SearchPage.dart';
 import 'package:socialfoody/pages/feed_header.dart';
 import 'package:socialfoody/widgets/HeaderWidget.dart';
 import 'package:socialfoody/widgets/ProgressWidget.dart';

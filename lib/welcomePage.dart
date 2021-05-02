@@ -96,8 +96,6 @@ class _WelcomePageState extends State<WelcomePage> {
     // );
   }
 
-
-
   Widget _title() {
     return RichText(
       textAlign: TextAlign.center,

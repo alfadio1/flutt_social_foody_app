@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -13,6 +14,10 @@ import 'package:socialfoody/pages/chatPage.dart';
 
 final GoogleSignIn gSignIn = GoogleSignIn();
 final usersReference = Firestore.instance.collection("users");
+final StorageReference storageReference = FirebaseStorage.instance.ref().child("Posts Pictures");
+final postsReference = Firestore.instance.collection("posts");
+final activityFeedReference = Firestore.instance.collection("feed");
+
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
@@ -41,6 +46,7 @@ class _HomePageState extends State<HomePage> {
       print("Error message: "+ gError);
     });
   }
+
   controlSignIn(GoogleSignInAccount signInAccount) async {
     if(signInAccount != null)
     {
@@ -85,6 +91,7 @@ class _HomePageState extends State<HomePage> {
     pageController.dispose();
     super.dispose();
   }
+
   loginUser(){
     gSignIn.signIn();
 
@@ -97,6 +104,7 @@ class _HomePageState extends State<HomePage> {
   onTapChangePage(int pageIndex){
     pageController.animateToPage(pageIndex, duration: Duration(microseconds: 400), curve: Curves.bounceInOut,);
   }
+
   whenPageChanges(int pageIndex){
     setState(() {
       this.getPageIndex = pageIndex;
@@ -104,13 +112,13 @@ class _HomePageState extends State<HomePage> {
 
   }
 
-
   Scaffold buildHomeScreen(){
     return Scaffold(
       body: PageView(
         children: <Widget>[
-          TimeLinePage(),
-      // RaisedButton.icon(onPressed: logoutUser, icon: Icon(Icons.close), label: Text("Sign Out")),
+          TimeLinePage(
+          ),
+
           ChatPage(),
           NotificationsPage(),
           ProfilePage(userProfileId: currentUser.id,),
@@ -136,6 +144,7 @@ class _HomePageState extends State<HomePage> {
     );
     // return RaisedButton.icon(onPressed: logoutUser, icon: Icon(Icons.close), label: Text("Sign Out"));
   }
+
   Scaffold buildSignInScreen(){
     return Scaffold(
       body: Container(
