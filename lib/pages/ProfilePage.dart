@@ -7,7 +7,7 @@ import 'package:socialfoody/pages/HomePage.dart';
 import 'package:socialfoody/widgets/HeaderWidget.dart';
 import 'package:socialfoody/widgets/PostTileWidget.dart';
 import 'package:socialfoody/widgets/ProgressWidget.dart';
-import 'package:socialfoody/pages/EditProfilePage.dart';
+// import 'package:socialfoody/pages/EditProfilePage.dart';
 import 'package:socialfoody/widgets/PostWidget.dart';
 
 
@@ -20,6 +20,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  // Handle Indicator
+  // List<T> map<T>(List list, Function handler) {
+  //   List<T> result = [];
+  //   for (var  i = 0; i < list.length; i++) {
+  //     result.add(handler(i, list[i]));
+  //   }
+  //   return result;
+  // }
 
   final String currentOnlineUserId = currentUser?.id;
 
@@ -46,64 +55,75 @@ class _ProfilePageState extends State<ProfilePage> {
         User user = User.fromDocument(dataSnapshot.data);
         return Padding(
           padding: EdgeInsets.all(17.0),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  CircleAvatar(
-                    radius: 45.0,
-                    backgroundColor: Colors.grey,
-                    backgroundImage: CachedNetworkImageProvider(user.url),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 35.0,
+                  backgroundColor: Colors.grey,
+                  backgroundImage: CachedNetworkImageProvider(user.url),
 
+                ),
+
+
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: 13.0),
+                  child: Text(
+                    user.username, style: TextStyle(fontSize: 14.0, color: Colors.black),
                   ),
-
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          mainAxisSize: MainAxisSize.max,
+                   ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: 5.0),
+                  child: Text(
+                    user.profileName, style: TextStyle(fontSize: 18.0, color: Colors.black),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: 3.0),
+                  child: Text(
+                    user.bio, style: TextStyle(fontSize: 18.0, color: Colors.black),
+                  ),
+                ),
+                Card(
+                  margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  clipBehavior: Clip.antiAlias,
+                  color: Colors.white,
+                  elevation: 8.0,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Column(
                           children: <Widget>[
-                            createColumns("Catalogue", 0),
-                            createColumns("Followers", 0),
-                            createColumns("Following", 0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                createColumns("Catalogue", 0),
+                                createColumns("Followers", 0),
+                                createColumns("Following", 0),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                createButton(),
+                              ],
+
+                            ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            createButton(),
-                          ],
-
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 13.0),
-                child: Text(
-                  user.username, style: TextStyle(fontSize: 14.0, color: Colors.black),
+                      )
+                    ],
+                  ),
                 ),
-                 ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 5.0),
-                child: Text(
-                  user.profileName, style: TextStyle(fontSize: 18.0, color: Colors.black),
-                ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 3.0),
-                child: Text(
-                  user.bio, style: TextStyle(fontSize: 18.0, color: Colors.black),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
 
@@ -175,6 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
           createProfileTopView(),
           // createSecondProfileView(),
           Divider(),
+          //createProfileBody(),
           createListAndGridPostOrientation(),
           Divider(height: 0.0,),
           displayProfilePost(),
@@ -182,6 +203,23 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
+  // createProfileBody(){
+  //   return Padding(
+  //     padding: EdgeInsets.only(left:  16, right: 13, top: 29),
+  //     child: Row(
+  //       children: [
+  //         Text('Operation'),
+  //         Row(
+  //           children:map<Widget>(datas, (index, selected) {
+  //             return Container();
+  //           }),
+  //         )
+  //       ],
+  //
+  //     ),
+  //   );
+  // }
 
 
   displayProfilePost()
