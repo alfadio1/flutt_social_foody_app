@@ -10,7 +10,7 @@ import 'package:socialfoody/pages/ProfilePage.dart';
 import 'package:socialfoody/pages/TimeLinePage.dart';
 
 import 'package:socialfoody/models/user.dart';
-import 'package:socialfoody/pages/chatPage.dart';
+import 'package:socialfoody/pages/ChatPage.dart';
 
 final GoogleSignIn gSignIn = GoogleSignIn();
 final usersReference = Firestore.instance.collection("users");

@@ -105,20 +105,14 @@ PODS:
     - FirebaseCore (~> 5.2)
     - GTMSessionFetcher/Core (~> 1.1)
   - Flutter (1.0.0)
-  - flutter_plugin_android_lifecycle (0.0.1):
-    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - geolocator (5.0.1):
     - Flutter
-  - google_api_availability (2.0.3):
-    - Flutter
   - google_sign_in (0.0.1):
     - Flutter
     - GoogleSignIn (~> 5.0)
-  - google_sign_in_web (0.8.1):
-    - Flutter
   - GoogleAppMeasurement (5.8.1):
     - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
     - GoogleUtilities/MethodSwizzler (~> 5.2)
@@ -184,9 +178,9 @@ PODS:
   - path_provider (0.0.1):
     - Flutter
   - Protobuf (3.8.0)
-  - sqflite (0.0.1):
+  - sqflite (0.0.2):
     - Flutter
-    - FMDB (~> 2.7.2)
+    - FMDB (>= 2.7.5)
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
@@ -194,12 +188,9 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
-  - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
+  - Flutter (from `Flutter`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
-  - google_api_availability (from `.symlinks/plugins/google_api_availability/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
-  - google_sign_in_web (from `.symlinks/plugins/google_sign_in_web/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -244,17 +235,11 @@ EXTERNAL SOURCES:
   firebase_storage:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
-  flutter_plugin_android_lifecycle:
-    :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
+    :path: Flutter
   geolocator:
     :path: ".symlinks/plugins/geolocator/ios"
-  google_api_availability:
-    :path: ".symlinks/plugins/google_api_availability/ios"
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
-  google_sign_in_web:
-    :path: ".symlinks/plugins/google_sign_in_web/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   location_permissions:
@@ -283,13 +268,10 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: a122b0c258720cf250551bb2bedf48c699f80d90
   FirebaseMessaging: 4235f949ce1c4e827aeb19705ba5c53f9b85aa10
   FirebaseStorage: 6162ef4322502b818d9de0ec552f5226d283de43
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_plugin_android_lifecycle: 47de533a02850f070f5696a623995e93eddcdb9b
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator: f3dd3b5b1761a15a4da00665774c5a8319e657d6
-  google_api_availability: 526574c9a5a0ae541e18c65f98e47afc11f53c8b
-  google_sign_in: decaf71f56e22fb1dc179de062177ae6df415716
-  google_sign_in_web: 52deb24929ac0992baff65c57956031c44ed44c3
+  google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
   GoogleAppMeasurement: ffe513e90551844a739e7bcbb1d2aca1c28a4338
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
@@ -297,14 +279,14 @@ SPEC CHECKSUMS:
   gRPC-Core: 4028031ed2c5267cca0d846c876d8046b1ecb9b6
   GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
-  image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
+  image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   location_permissions: 4a49d4e5bec5b653643e551ab77963cc99bb0e4a
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   Protobuf: 3f617b9a6e73605565086864c9bc26b2bf2dd5a3
-  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
 
-PODFILE CHECKSUM: 81d9101721a74b9b88ddd9e9dfe15eec968bc82e
+PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.1
