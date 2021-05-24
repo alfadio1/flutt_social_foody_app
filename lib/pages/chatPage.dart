@@ -7,12 +7,15 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: header(context, strTitle: "Chat", ),
+
     );
   }
+
 }
 
 class UserResult extends StatelessWidget {

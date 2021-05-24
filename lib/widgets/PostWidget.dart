@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:socialfoody/models/user.dart';
 import 'package:socialfoody/pages/HomePage.dart';
+import 'package:socialfoody/pages/ProfilePage.dart';
 import 'package:socialfoody/widgets/CImageWidget.dart';
 import 'package:socialfoody/widgets/ProgressWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -137,21 +138,27 @@ class _PostState extends State<Post> {
         return ListTile(
           leading: CircleAvatar(backgroundImage: CachedNetworkImageProvider(user.url),backgroundColor: Colors.grey,),
           title: GestureDetector(
-            onTap: ()=> print("show profile"),
+            onTap: ()=> displayUserProfile(context, userProfileId: user.id),
             child: Text(
               user.username,
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
           ),
-          subtitle: Text(location, style: TextStyle(color: Colors.white),),
+          subtitle: Text(location, style: TextStyle(color: Colors.black),),
           trailing: isPostOwner ? IconButton(
-            icon: Icon(Icons.more_vert, color: Colors.white,),
+            icon: Icon(Icons.more_vert, color: Colors.black,),
             onPressed: ()=> print("deleted"),
           ) : Text(""),
         );
       },
     );
   }
+
+  displayUserProfile(BuildContext context, {String userProfileId}){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilePage(userProfileId: userProfileId,)));
+  }
+
+
 
   removeLike(){
     bool isNotPostOwner = currentOnlineUserId != ownerId;
@@ -177,7 +184,7 @@ class _PostState extends State<Post> {
         "type": "like",
         "username": currentUser.username,
         "userId": currentUser.id,
-        "timestamp": timestamp,
+        "timestamp": DateTime.now(),
         "url": url,
         "posId": postId,
         "userProfileImg": currentUser.url,
@@ -267,7 +274,7 @@ class _PostState extends State<Post> {
               margin: EdgeInsets.only(left: 20.0),
               child: Text(
                 "$likeCount likes",
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),
           ],

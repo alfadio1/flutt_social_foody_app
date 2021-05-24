@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socialfoody/pages/eventsPage.dart';
 // import 'package:socialfoody/pages/eventsPage.dart';
 // import 'package:socialfoody/pages/battle_of_recipePage.dart';
 
@@ -29,7 +30,8 @@ class FeatureBanner extends StatelessWidget {
               child: Text('Events',
                 style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              onPressed: () => null,
+              onPressed: () =>  Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => EventPage())),
             ),
           ),
 

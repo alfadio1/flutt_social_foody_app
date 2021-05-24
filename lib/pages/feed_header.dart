@@ -5,6 +5,7 @@ import 'package:socialfoody/pages/icon_btn_with_counter.dart';
 import 'package:socialfoody/pages/SearchPage.dart';
 // import 'package:socialfoody/pages/features_banner.dart';
 import 'package:socialfoody/pages/HomePage.dart';
+// import 'package:socialfoody/pages/trial.dart';
 
 
 class HomeHeader extends StatelessWidget {
@@ -23,7 +24,9 @@ class HomeHeader extends StatelessWidget {
           ),
           IconBtnWithCounter(
             icon: Icons.video_call_outlined,
-            press: () {},
+
+            press: () {
+                          }
           ),
           IconBtnWithCounter(
             icon: Icons.add_to_photos, press: (){
